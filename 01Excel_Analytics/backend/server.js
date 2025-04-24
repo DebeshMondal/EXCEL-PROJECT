@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 const port = 5000;
@@ -13,14 +14,18 @@ const users = [
   { id: 1, email: 'test@example.com', password: 'password' },
 ];
 
+// Secret key for JWT (should be stored in a secure environment variable)
+const secretKey = 'yourSecretKey';
+
 app.post('/api/login', (req, res) => {
   const { email, password } = req.body;
 
   const user = users.find((u) => u.email === email && u.password === password);
 
   if (user) {
-    // In a real application, you would generate a JWT token here
-    res.json({ token: 'mock_token' });
+    // Generate JWT token
+    const token = jwt.sign({ userId: user.id, email: user.email }, secretKey, { expiresIn: '1h' });
+    res.json({ token });
   } else {
     res.status(401).json({ message: 'Invalid credentials' });
   }

@@ -8,7 +8,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post('/api/login', { email, password });
+      const res = await axios.post('/login', { email, password });
       localStorage.setItem('token', res.data.token);
       alert('Login success 🎉');
       // You can navigate or decode token here
